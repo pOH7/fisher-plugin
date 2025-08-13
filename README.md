@@ -22,6 +22,10 @@ Switch between Kubernetes namespaces in the current context with validation and 
 
 Switch between Kubernetes contexts with optional namespace setting and comprehensive validation.
 
+### Fastfetch Greeting - Automatic System Info Display
+
+Automatically configures Fish shell to use fastfetch for system information display on shell startup. No manual setup required - just install the plugin!
+
 ```fish
 # Connect to remote server with Fish shell auto-detection
 fissh user@hostname
@@ -79,6 +83,27 @@ kctx --dry-run staging-cluster
 
 # Get help
 kctx --help
+```
+
+#### Fastfetch Greeting Configuration
+
+The fastfetch greeting is automatically enabled when you install the plugin and fastfetch is available. Configure it using environment variables:
+
+```fish
+# Enable fastfetch greeting (auto-detected by default)
+set -g FISHER_FASTFETCH_GREETING true
+
+# Disable fastfetch greeting entirely 
+set -g FISHER_FASTFETCH_GREETING disable
+
+# Reset to default Fish greeting
+set -g FISHER_FASTFETCH_GREETING reset
+
+# Disable fastfetch greeting (keep default Fish greeting)
+set -g FISHER_FASTFETCH_GREETING false
+
+# Enable verbose error messages when fastfetch is not found
+set -g FISHER_FASTFETCH_GREETING_VERBOSE true
 ```
 
 The `fissh` command provides:
@@ -147,6 +172,15 @@ git-bump --help
 - **Error handling**: Comprehensive error checking and helpful error messages
 - **Built-in help**: Complete usage documentation with examples
 
+### Fastfetch Greeting
+- **Automatic setup**: No manual configuration needed - works immediately after plugin installation
+- **Smart dependency detection**: Automatically detects if fastfetch is available and enables accordingly
+- **Graceful fallback**: Falls back to default Fish greeting if fastfetch fails or is unavailable  
+- **Environment variable configuration**: Simple variable-based control instead of commands
+- **Persistent settings**: Configuration persists across Fish shell sessions
+- **Zero overhead**: Only runs detection once per shell session
+- **Error handling**: Comprehensive error checking with optional verbose messaging
+
 ### git-bump
 - **Default behavior**: `git-bump` defaults to `patch --prefix v` with automatic push
 - **Semantic versioning**: Follows X.Y.Z format
@@ -183,6 +217,7 @@ git-bump              # Creates v0.0.1 and pushes to remote
 - kubectl (for kcd and kctx)
 - Valid Kubernetes configuration (for kcd and kctx)
 - Git repository with remote configured (for git-bump push functionality)
+- fastfetch (optional, for fish_greeting_fastfetch) - Install from: https://github.com/fastfetch-cli/fastfetch
 
 ## License
 
