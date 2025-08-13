@@ -14,6 +14,14 @@ fisher install pOH7/fisher-plugin
 
 Connect to remote servers using Fish shell when available, with intelligent fallback and flexible options.
 
+### kcd - Kubernetes Namespace Management
+
+Switch between Kubernetes namespaces in the current context with validation and helpful feedback.
+
+### kctx - Kubernetes Context Management
+
+Switch between Kubernetes contexts with optional namespace setting and comprehensive validation.
+
 ```fish
 # Connect to remote server with Fish shell auto-detection
 fissh user@hostname
@@ -30,6 +38,47 @@ fissh --help                               # Show detailed help
 
 # Combine fissh and SSH options
 fissh --verbose -p 2222 user@hostname
+```
+
+#### kcd Usage
+
+```fish
+# Switch to a specific namespace
+kcd production
+
+# List all available namespaces  
+kcd --list
+
+# Show current namespace
+kcd --current
+
+# Preview namespace change
+kcd --dry-run staging
+
+# Get help
+kcd --help
+```
+
+#### kctx Usage
+
+```fish
+# Switch to a specific context
+kctx production-cluster
+
+# Switch context and set namespace
+kctx prod-cluster --namespace=api
+
+# List all available contexts
+kctx --list
+
+# Show current context
+kctx --current
+
+# Preview context change
+kctx --dry-run staging-cluster
+
+# Get help
+kctx --help
 ```
 
 The `fissh` command provides:
@@ -88,6 +137,16 @@ git-bump --help
 - **Enhanced tab completion**: Completions for fissh options plus inherited SSH completions
 - **Built-in help**: Comprehensive help system with usage examples
 
+### kcd & kctx
+- **Smart validation**: Checks if namespaces/contexts exist before switching
+- **Helpful feedback**: Clear success/error messages and current state display
+- **List functionality**: Easy discovery of available namespaces and contexts
+- **Dry-run mode**: Preview changes before applying them
+- **Tab completion**: Dynamic completion of namespaces and contexts from kubectl
+- **Combined operations**: kctx can switch context and set namespace in one command
+- **Error handling**: Comprehensive error checking and helpful error messages
+- **Built-in help**: Complete usage documentation with examples
+
 ### git-bump
 - **Default behavior**: `git-bump` defaults to `patch --prefix v` with automatic push
 - **Semantic versioning**: Follows X.Y.Z format
@@ -121,6 +180,8 @@ git-bump              # Creates v0.0.1 and pushes to remote
 - Fish shell
 - Fisher plugin manager
 - SSH client (for fissh)
+- kubectl (for kcd and kctx)
+- Valid Kubernetes configuration (for kcd and kctx)
 - Git repository with remote configured (for git-bump push functionality)
 
 ## License
