@@ -1,4 +1,4 @@
-function __gh_complete_repos
+function __repo_complete_repos
     set -l base_dir ~/Developer
     set -l cache_file ~/.cache/fish/gh_repos
     set -l cache_age 300
@@ -20,7 +20,7 @@ function __gh_complete_repos
     cat $cache_file
 end
 
-function __gh_complete_branches
+function __repo_complete_branches
     set -l repo_path $argv[1]
     
     if test -d "$repo_path/.git"
@@ -28,10 +28,10 @@ function __gh_complete_branches
     end
 end
 
-complete -c gh -f
+complete -c repo -f
 
-complete -c gh -n '__fish_is_first_token' -a '(__gh_complete_repos)' -d 'Repository'
+complete -c repo -n '__fish_is_first_token' -a '(__repo_complete_repos)' -d 'Repository'
 
-complete -c gh -n '__fish_is_first_token' -a '(find ~/Developer -maxdepth 6 -name ".git" -type d 2>/dev/null | while read git_dir; set repo_path (dirname $git_dir); if string match -q "*$(commandline -t)*" (basename $repo_path); echo (string replace ~/Developer/ "" $repo_path); end; end)' -d 'Repository (filtered)'
+complete -c repo -n '__fish_is_first_token' -a '(find ~/Developer -maxdepth 6 -name ".git" -type d 2>/dev/null | while read git_dir; set repo_path (dirname $git_dir); if string match -q "*$(commandline -t)*" (basename $repo_path); echo (string replace ~/Developer/ "" $repo_path); end; end)' -d 'Repository (filtered)'
 
-complete -c gh -n 'test (count (commandline -opc)) -eq 2' -a '(__gh_complete_branches (commandline -opc)[2])' -d 'Branch'
+complete -c repo -n 'test (count (commandline -opc)) -eq 2' -a '(__repo_complete_branches (commandline -opc)[2])' -d 'Branch'

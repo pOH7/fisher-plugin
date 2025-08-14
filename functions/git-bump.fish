@@ -1,5 +1,5 @@
 function git-bump --description "Bump git tag version following semantic versioning"
-    set -l options h/help d/dry-run l/list p/prefix= no-prefix no-push
+    set -l options h/help d/dry-run l/list p/prefix= no-prefix no-push f/force
     argparse $options -- $argv
     or return 1
 
@@ -43,9 +43,22 @@ function git-bump --description "Bump git tag version following semantic version
     set -l new_version (__git_bump_increment_version $current_version $bump_type)
     set -l new_tag "$prefix$new_version"
 
+    set -l same_commit_warning ""
+    if not set -q _flag_force
+        if __git_bump_is_same_commit_as_latest_tag
+            set same_commit_warning "Warning: Current HEAD is already at the latest tag ($(__git_bump_get_latest_version_with_prefix))."
+        end
+    end
+
     if set -q _flag_dry_run
         echo "Current version: $prefix$current_version"
         echo "Next version: $new_tag"
+        if test -n "$same_commit_warning"
+            echo "$same_commit_warning"
+            echo "Creating a new tag will result in multiple tags pointing to the same commit."
+            echo "Operation would be aborted (use --force to override)."
+            return 1
+        end
         if not set -q _flag_no_push
             echo "Would push to remote: $(__git_bump_get_default_remote)"
         end
@@ -55,6 +68,16 @@ function git-bump --description "Bump git tag version following semantic version
     if __git_bump_has_uncommitted_changes
         echo "Warning: You have uncommitted changes. Consider committing before tagging." >&2
         read -l -P "Continue anyway? [y/N] " confirm
+        if test "$confirm" != "y" -a "$confirm" != "Y"
+            echo "Aborted."
+            return 1
+        end
+    end
+
+    if test -n "$same_commit_warning"
+        echo "$same_commit_warning" >&2
+        echo "Creating a new tag will result in multiple tags pointing to the same commit." >&2
+        read -l -P "Continue anyway? Use --force to skip this check. [y/N] " confirm
         if test "$confirm" != "y" -a "$confirm" != "Y"
             echo "Aborted."
             return 1
@@ -96,8 +119,9 @@ function __git_bump_help
     echo "  -d, --dry-run     Show what would be done without creating tag"
     echo "  -l, --list        List current version and recent tags"
     echo "  -p, --prefix=STR  Use custom prefix (default: 'v')"
-    echo "  --no-prefix       Don't use any prefix
-  --no-push         Don't push tag to remote (default: push)"
+    echo "  --no-prefix       Don't use any prefix"
+    echo "  --no-push         Don't push tag to remote (default: push)"
+    echo "  -f, --force       Skip same-commit check when HEAD is at latest tag"
     echo ""
     echo "Examples:"
     echo "  git-bump                    # Bump patch with 'v' prefix and push"
@@ -106,6 +130,7 @@ function __git_bump_help
     echo "  git-bump patch --prefix=rel # Bump patch with 'rel' prefix and push"
     echo "  git-bump --no-push          # Bump patch locally only (no push)"
     echo "  git-bump --dry-run minor    # Preview minor bump"
+    echo "  git-bump --force            # Force bump even if HEAD is at latest tag"
 end
 
 function __git_bump_list
@@ -175,6 +200,30 @@ function __git_bump_get_default_remote
     else
         echo $remote
     end
+end
+
+function __git_bump_get_tag_commit
+    set -l tag $argv[1]
+    if test -z "$tag"
+        return 1
+    end
+    git rev-list -n 1 "$tag" 2>/dev/null
+end
+
+function __git_bump_is_same_commit_as_latest_tag
+    set -l latest_tag (__git_bump_get_latest_version_with_prefix)
+    if test $status -ne 0
+        return 1
+    end
+    
+    set -l current_commit (git rev-parse HEAD 2>/dev/null)
+    set -l tag_commit (__git_bump_get_tag_commit "$latest_tag")
+    
+    if test -z "$current_commit" -o -z "$tag_commit"
+        return 1
+    end
+    
+    test "$current_commit" = "$tag_commit"
 end
 
 function __git_bump_push_tag

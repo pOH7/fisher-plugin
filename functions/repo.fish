@@ -1,8 +1,8 @@
-function gh
+function repo
     set -l base_dir ~/Developer
     
     if test (count $argv) -eq 0; or test "$argv[1]" = "-h"; or test "$argv[1]" = "--help"
-        echo "Usage: gh <repo-url|repo-path> [branch]"
+        echo "Usage: repo <repo-url|repo-path> [branch]"
         echo "  repo-url: Git repository URL (https/ssh)"
         echo "  repo-path: Local repository path"
         echo "  branch: Branch name for worktree creation"
@@ -16,30 +16,30 @@ function gh
     set -l branch $argv[2]
 
     if string match -qr '^(https?|git)' $arg1
-        __gh_handle_repo_url $arg1 $base_dir
+        __repo_handle_repo_url $arg1 $base_dir
     else if not test -z $branch
-        __gh_handle_worktree $arg1 $branch
+        __repo_handle_worktree $arg1 $branch
     else
-        __gh_navigate_to_repo $arg1
+        __repo_navigate_to_repo $arg1
     end
 end
 
-function __gh_handle_repo_url
+function __repo_handle_repo_url
     set -l repo_url $argv[1]
     set -l base_dir $argv[2]
     
-    set -l repo_path (__gh_parse_repo_path $repo_url $base_dir)
+    set -l repo_path (__repo_parse_repo_path $repo_url $base_dir)
     
     if not test -d $repo_path
-        if not __gh_clone_repo $repo_url $repo_path
+        if not __repo_clone_repo $repo_url $repo_path
             return 1
         end
     end
     
-    __gh_navigate_to $repo_path
+    __repo_navigate_to $repo_path
 end
 
-function __gh_handle_worktree
+function __repo_handle_worktree
     set -l repo_path $argv[1]
     set -l branch $argv[2]
     
@@ -51,15 +51,15 @@ function __gh_handle_worktree
     set -l worktree_path "$repo_path"_(string replace -a '/' '_' $branch)
     
     if not test -d $worktree_path
-        if not __gh_create_worktree $repo_path $worktree_path $branch
+        if not __repo_create_worktree $repo_path $worktree_path $branch
             return 1
         end
     end
     
-    __gh_navigate_to $worktree_path
+    __repo_navigate_to $worktree_path
 end
 
-function __gh_navigate_to_repo
+function __repo_navigate_to_repo
     set -l repo_path $argv[1]
     
     if not test -d $repo_path
@@ -67,17 +67,17 @@ function __gh_navigate_to_repo
         return 1
     end
     
-    __gh_navigate_to $repo_path
+    __repo_navigate_to $repo_path
 end
 
-function __gh_parse_repo_path
+function __repo_parse_repo_path
     set -l repo_url $argv[1]
     set -l base_dir $argv[2]
     
     echo $base_dir/(string replace -r '^https?://' '' $repo_url | string replace -r '^git@([^:]+):' '$1/' | string replace -r '.git$' '')
 end
 
-function __gh_clone_repo
+function __repo_clone_repo
     set -l repo_url $argv[1]
     set -l repo_path $argv[2]
     
@@ -96,7 +96,7 @@ function __gh_clone_repo
     return 0
 end
 
-function __gh_create_worktree
+function __repo_create_worktree
     set -l repo_path $argv[1]
     set -l worktree_path $argv[2]
     set -l branch $argv[3]
@@ -116,7 +116,7 @@ function __gh_create_worktree
     return 0
 end
 
-function __gh_navigate_to
+function __repo_navigate_to
     set -l target_path $argv[1]
     
     if not test -d $target_path
