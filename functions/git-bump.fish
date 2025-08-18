@@ -35,7 +35,7 @@ function git-bump --description "Bump git tag version following semantic version
         set prefix $_flag_prefix
     end
 
-    set -l current_version (__git_bump_get_latest_version)
+    set -l current_version (__git_bump_get_latest_version $prefix)
     if test $status -ne 0
         set current_version "0.0.0"
     end
@@ -45,8 +45,8 @@ function git-bump --description "Bump git tag version following semantic version
 
     set -l same_commit_warning ""
     if not set -q _flag_force
-        if __git_bump_is_same_commit_as_latest_tag
-            set same_commit_warning "Warning: Current HEAD is already at the latest tag ($(__git_bump_get_latest_version_with_prefix))."
+        if __git_bump_is_same_commit_as_latest_tag $prefix
+            set same_commit_warning "Warning: Current HEAD is already at the latest tag ($(__git_bump_get_latest_version_with_prefix $prefix))."
         end
     end
 
@@ -137,7 +137,7 @@ function __git_bump_list
     echo "Recent tags:"
     git tag --sort=-version:refname | head -10
     echo ""
-    echo "Current version: $(__git_bump_get_latest_version_with_prefix)"
+    echo "Current version: $(__git_bump_get_latest_version_with_prefix v)"
 end
 
 function __git_bump_is_git_repo
@@ -149,15 +149,44 @@ function __git_bump_has_uncommitted_changes
 end
 
 function __git_bump_get_latest_version
-    set -l latest_tag (git tag --sort=-version:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+    set -l prefix_arg $argv[1]
+    if test -z "$prefix_arg"
+        set prefix_arg "v"
+    end
+    
+    set -l regex_pattern
+    if test "$prefix_arg" = ""
+        set regex_pattern '^[0-9]+\.[0-9]+\.[0-9]+$'
+    else
+        set regex_pattern "^$prefix_arg""[0-9]+\\.[0-9]+\\.[0-9]+\$"
+    end
+    
+    set -l latest_tag (git tag --sort=-version:refname | grep -E "$regex_pattern" | head -1)
     if test -z "$latest_tag"
         return 1
     end
-    echo $latest_tag | sed 's/^v*//'
+    
+    if test "$prefix_arg" = ""
+        echo $latest_tag
+    else
+        echo $latest_tag | sed "s/^$prefix_arg//"
+    end
 end
 
 function __git_bump_get_latest_version_with_prefix
-    set -l latest_tag (git tag --sort=-version:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+    set -l prefix_arg $argv[1]
+    if test -z "$prefix_arg"
+        set prefix_arg "v"
+    end
+    
+    set -l regex_pattern
+    if test "$prefix_arg" = ""
+        set regex_pattern '^[0-9]+\.[0-9]+\.[0-9]+$'
+    else
+        set regex_pattern "^$prefix_arg""[0-9]+\\.[0-9]+\\.[0-9]+\$"
+    end
+    
+    set -l latest_tag (git tag --sort=-version:refname | grep -E "$regex_pattern" | head -1)
     if test -z "$latest_tag"
         echo "No version tags found"
         return 1
@@ -211,7 +240,12 @@ function __git_bump_get_tag_commit
 end
 
 function __git_bump_is_same_commit_as_latest_tag
-    set -l latest_tag (__git_bump_get_latest_version_with_prefix)
+    set -l prefix_arg $argv[1]
+    if test -z "$prefix_arg"
+        set prefix_arg "v"
+    end
+    
+    set -l latest_tag (__git_bump_get_latest_version_with_prefix $prefix_arg)
     if test $status -ne 0
         return 1
     end
