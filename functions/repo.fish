@@ -1,7 +1,27 @@
 function repo
     set -l base_dir ~/Developer
-    
-    if test (count $argv) -eq 0; or test "$argv[1]" = "-h"; or test "$argv[1]" = "--help"
+
+    # If no args: if inside a Git repo/worktree, jump to its root
+    if test (count $argv) -eq 0
+        # Silence both stdout and stderr correctly in fish
+        if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+            set -l git_root (command git rev-parse --show-toplevel)
+            if test -n "$git_root"
+                __repo_navigate_to $git_root
+                return 0
+            end
+        end
+        echo "Usage: repo <repo-url|repo-path> [branch]"
+        echo "  repo-url: Git repository URL (https/ssh)"
+        echo "  repo-path: Local repository path"
+        echo "  branch: Branch name for worktree creation"
+        echo ""
+        echo "Options:"
+        echo "  -h, --help    Show this help message"
+        return 0
+    end
+
+    if test "$argv[1]" = "-h"; or test "$argv[1]" = "--help"
         echo "Usage: repo <repo-url|repo-path> [branch]"
         echo "  repo-url: Git repository URL (https/ssh)"
         echo "  repo-path: Local repository path"
