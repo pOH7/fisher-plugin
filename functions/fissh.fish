@@ -38,7 +38,7 @@ function _fissh_help
     echo "fissh - SSH with Fish shell on remote servers"
     echo
     echo "USAGE:"
-    echo "    fissh [OPTIONS] [SSH_OPTIONS] destination"
+    echo "    fissh [OPTIONS] [-- SSH_OPTIONS] destination"
     echo
     echo "OPTIONS:"
     echo "    -h, --help      Show this help message"
@@ -48,10 +48,12 @@ function _fissh_help
     echo
     echo "EXAMPLES:"
     echo "    fissh user@example.com"
-    echo "    fissh -p 2222 user@example.com"
+    echo "    fissh -- -p 2222 user@example.com"
     echo "    fissh --verbose user@example.com"
     echo "    fissh --shell=zsh user@example.com"
     echo "    fissh --no-fish user@example.com"
+    echo
+    echo "Put native SSH options after '--' so fissh can parse its own flags first."
     echo
     echo "The command automatically detects if Fish shell is available on the"
     echo "remote server and uses it. Falls back to the default shell if not available."
