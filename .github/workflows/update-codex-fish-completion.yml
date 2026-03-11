@@ -1,0 +1,63 @@
+name: Update Codex Fish Completion
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: update-codex-fish-completion
+      cancel-in-progress: false
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolve latest Codex CLI version
+        id: codex
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(npm view @openai/codex version)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Using Codex CLI $version"
+
+      - name: Install Codex CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global "@openai/codex@${{ steps.codex.outputs.version }}"
+
+      - name: Regenerate Fish completion
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p completions
+          codex --version
+          codex completion fish > completions/codex.fish
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/update-codex-fish-completion
+          delete-branch: true
+          commit-message: "chore: update codex fish completion to v${{ steps.codex.outputs.version }}"
+          title: "chore: update codex fish completion to v${{ steps.codex.outputs.version }}"
+          body: |
+            Updates `completions/codex.fish` by running:
+
+            `codex completion fish > completions/codex.fish`
+
+            Source version: `${{ steps.codex.outputs.version }}`
