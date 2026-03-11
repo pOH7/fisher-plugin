@@ -14,6 +14,10 @@ fisher install pOH7/fisher-plugin
 
 Connect to remote servers using Fish shell when available, with intelligent fallback and flexible options.
 
+### mofish - Mosh with Fish Shell
+
+Connect to remote servers through `mosh`, preferring Fish on the remote host and falling back to the remote login shell when Fish is unavailable.
+
 ### kcd - Kubernetes Namespace Management
 
 Switch between Kubernetes namespaces in the current context with validation and helpful feedback.
@@ -42,6 +46,18 @@ fissh --help                               # Show detailed help
 
 # Combine fissh and SSH options
 fissh --verbose -p 2222 user@hostname
+
+# Connect with mosh and start Fish when available
+mofish user@hostname
+
+# Pass native mosh options
+mofish -n user@hostname
+mofish --ssh="ssh -p 2222" user@hostname
+mofish --family=inet6 user@hostname
+
+# Show native mosh help/version
+mofish --help
+mofish --version
 ```
 
 #### kcd Usage
@@ -114,6 +130,14 @@ The `fissh` command provides:
 - **Full SSH compatibility**: Supports all SSH options and arguments
 - **Help system**: Built-in help with `--help` option
 
+The `mofish` command provides:
+- **Fish-first mosh sessions**: Starts `fish -li` on the remote host when Fish is installed
+- **Login-shell fallback**: Falls back to `${SHELL:-/bin/sh} -li` when Fish is unavailable
+- **Native mosh compatibility**: Passes through native `mosh` flags like `-p`, `--ssh`, and `--family`
+- **Interactive-only contract**: Reserves the remote command slot for shell bootstrap and rejects custom remote commands
+
+`mofish` inherits the normal `mosh` constraints, including its focus on interactive terminal sessions rather than SSH port forwarding or arbitrary remote commands.
+
 ### git-bump - Semantic Version Bumping
 
 Basic Commands
@@ -161,6 +185,13 @@ git-bump --help
 - **Full SSH compatibility**: Supports all SSH options and arguments
 - **Enhanced tab completion**: Completions for fissh options plus inherited SSH completions
 - **Built-in help**: Comprehensive help system with usage examples
+
+### mofish
+- **Roaming-friendly shell sessions**: Uses `mosh` for resilient interactive remote sessions
+- **Fish-first startup**: Launches Fish automatically when the remote host has it installed
+- **Graceful fallback**: Falls back to the remote login shell when Fish is unavailable
+- **Native tab completion**: Inherits the existing Fish completions for `mosh`
+- **Interactive-only safety**: Rejects extra remote command arguments because the wrapper owns the startup command
 
 ### kcd & kctx
 - **Smart validation**: Checks if namespaces/contexts exist before switching
@@ -214,6 +245,7 @@ git-bump              # Creates v0.0.1 and pushes to remote
 - Fish shell
 - Fisher plugin manager
 - SSH client (for fissh)
+- mosh client and mosh-server (for mofish)
 - kubectl (for kcd and kctx)
 - Valid Kubernetes configuration (for kcd and kctx)
 - Git repository with remote configured (for git-bump push functionality)
