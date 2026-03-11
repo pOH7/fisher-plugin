@@ -49,6 +49,7 @@ jobs:
           codex completion fish > completions/codex.fish
 
       - name: Create pull request
+        id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
           branch: automation/update-codex-fish-completion
@@ -61,3 +62,12 @@ jobs:
             `codex completion fish > completions/codex.fish`
 
             Source version: `${{ steps.codex.outputs.version }}`
+
+      - name: Merge pull request
+        if: steps.cpr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr merge --auto --merge --delete-branch "${{ steps.cpr.outputs.pull-request-url }}"
