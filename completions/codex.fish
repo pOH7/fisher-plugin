@@ -306,8 +306,8 @@ complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "seatbelt" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "linux" -d 'Run a command under Landlock+seccomp (Linux only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "landlock" -d 'Run a command under Landlock+seccomp (Linux only)'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "landlock" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -338,7 +338,7 @@ complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_sub
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (network-disabled sandbox that can write to cwd and TMPDIR)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "linux" -d 'Run a command under Landlock+seccomp (Linux only)'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from app-server clear-memories help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -547,7 +547,7 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "linux" -d 'Run a command under Landlock+seccomp (Linux only)'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "app-server" -d 'Tooling: helps debug the app server'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "clear-memories" -d 'Internal: reset local memory state for a fresh start'
