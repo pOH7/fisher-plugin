@@ -28,7 +28,7 @@ Detailed command references live outside the main README:
 - `kcd`: Switch the namespace for the current Kubernetes context.
 - `kctx`: Switch Kubernetes contexts and optionally set a namespace at the same time.
 - `git-bump`: Create the next semantic version tag and push it by default.
-- `repo`: Jump to a repo root, clone a repo into `~/Developer`, or open a worktree.
+- `repo`: Jump to a repo root, resolve a unique local repo query, clone into `~/Developer`, or open a worktree.
 
 ## Requirements
 

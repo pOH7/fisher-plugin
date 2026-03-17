@@ -38,9 +38,9 @@ function repo
     if string match -qr '^(https?|git)' $arg1
         __repo_handle_repo_url $arg1 $base_dir
     else if not test -z $branch
-        __repo_handle_worktree $arg1 $branch
+        __repo_handle_worktree $arg1 $branch $base_dir
     else
-        __repo_navigate_to_repo $arg1
+        __repo_navigate_to_repo $arg1 $base_dir
     end
 end
 
@@ -60,13 +60,11 @@ function __repo_handle_repo_url
 end
 
 function __repo_handle_worktree
-    set -l repo_path $argv[1]
+    set -l repo_input $argv[1]
     set -l branch $argv[2]
-    
-    if not test -d $repo_path
-        echo "Error: Repository path '$repo_path' does not exist" >&2
-        return 1
-    end
+    set -l base_dir $argv[3]
+    set -l repo_path (__repo_resolve_repo_path $repo_input $base_dir)
+    or return 1
     
     set -l worktree_path "$repo_path"_(string replace -a '/' '_' $branch)
     
@@ -80,14 +78,93 @@ function __repo_handle_worktree
 end
 
 function __repo_navigate_to_repo
-    set -l repo_path $argv[1]
-    
-    if not test -d $repo_path
-        echo "Error: Repository path '$repo_path' does not exist" >&2
-        return 1
-    end
+    set -l repo_input $argv[1]
+    set -l base_dir $argv[2]
+    set -l repo_path (__repo_resolve_repo_path $repo_input $base_dir)
+    or return 1
     
     __repo_navigate_to $repo_path
+end
+
+function __repo_resolve_repo_path
+    set -l repo_input $argv[1]
+    set -l base_dir $argv[2]
+
+    if test -d "$repo_input"
+        echo $repo_input
+        return 0
+    end
+
+    set -l rooted_repo_path "$base_dir/$repo_input"
+    if test -d "$rooted_repo_path"
+        echo $rooted_repo_path
+        return 0
+    end
+
+    set -l exact_matches (__repo_find_matching_repos $repo_input $base_dir exact)
+    if test (count $exact_matches) -eq 1
+        echo $exact_matches[1]
+        return 0
+    else if test (count $exact_matches) -gt 1
+        __repo_print_ambiguous_matches $repo_input $base_dir $exact_matches
+        return 1
+    end
+
+    set -l contains_matches (__repo_find_matching_repos $repo_input $base_dir contains)
+    if test (count $contains_matches) -eq 1
+        echo $contains_matches[1]
+        return 0
+    else if test (count $contains_matches) -gt 1
+        __repo_print_ambiguous_matches $repo_input $base_dir $contains_matches
+        return 1
+    end
+
+    echo "Error: Repository '$repo_input' does not exist" >&2
+    return 1
+end
+
+function __repo_find_matching_repos
+    set -l repo_input $argv[1]
+    set -l base_dir $argv[2]
+    set -l match_mode $argv[3]
+    set -l repo_input_lower (string lower -- "$repo_input")
+    set -l repo_input_regex (string escape --style=regex -- "$repo_input_lower")
+
+    find -L $base_dir -maxdepth 6 -name '.git' -type d 2>/dev/null | while read -l git_dir
+        set -l repo_path (dirname "$git_dir")
+        set -l relative_repo_path (string replace "$base_dir/" '' "$repo_path")
+        set -l relative_repo_path_lower (string lower -- "$relative_repo_path")
+        set -l repo_name_lower (string lower -- (basename "$repo_path"))
+        set -l repo_name_tokens (string replace -ra '[-_]+' '\n' -- "$repo_name_lower")
+
+        switch $match_mode
+            case exact
+                if test "$relative_repo_path_lower" = "$repo_input_lower"
+                    echo $repo_path
+                else if test "$repo_name_lower" = "$repo_input_lower"
+                    echo $repo_path
+                else if contains -- "$repo_input_lower" $repo_name_tokens
+                    echo $repo_path
+                end
+            case contains
+                if string match -rq -- ".*$repo_input_regex.*" "$relative_repo_path_lower"
+                    echo $repo_path
+                else if string match -rq -- ".*$repo_input_regex.*" "$repo_name_lower"
+                    echo $repo_path
+                end
+        end
+    end | sort -u
+end
+
+function __repo_print_ambiguous_matches
+    set -l repo_input $argv[1]
+    set -l base_dir $argv[2]
+
+    echo "Error: Multiple repositories match '$repo_input':" >&2
+
+    for repo_path in $argv[3..-1]
+        echo "  "(string replace "$base_dir/" '' "$repo_path") >&2
+    end
 end
 
 function __repo_parse_repo_path
