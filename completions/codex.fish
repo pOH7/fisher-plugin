@@ -1,6 +1,6 @@
 # Print an optspec for argparse to handle cmd's options that are independent of any subcommand.
 function __fish_codex_global_optspecs
-	string join \n c/config= enable= disable= i/image= m/model= oss local-provider= p/profile= s/sandbox= a/ask-for-approval= full-auto dangerously-bypass-approvals-and-sandbox C/cd= search add-dir= no-alt-screen h/help V/version
+	string join \n c/config= enable= disable= remote= i/image= m/model= oss local-provider= p/profile= s/sandbox= a/ask-for-approval= full-auto dangerously-bypass-approvals-and-sandbox C/cd= search add-dir= no-alt-screen h/help V/version
 end
 
 function __fish_codex_needs_command
@@ -27,6 +27,7 @@ end
 complete -c codex -n "__fish_codex_needs_command" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_needs_command" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_needs_command" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_needs_command" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_needs_command" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_needs_command" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_needs_command" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -271,15 +272,17 @@ complete -c codex -n "__fish_codex_using_subcommand mcp-server" -s c -l config -
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -l listen -d 'Transport endpoint URL. Supported values: `stdio://` (default), `ws://IP:PORT`' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -l analytics-default-enabled -d 'Controls whether analytics are enabled by default'
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l listen -d 'Transport endpoint URL. Supported values: `stdio://` (default), `ws://IP:PORT`' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l session-source -d 'Session source stamped into new threads started by this app-server' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l analytics-default-enabled -d 'Controls whether analytics are enabled by default'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-ts" -s o -l out -d 'Output directory where .ts files will be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-ts" -s p -l prettier -d 'Optional path to the Prettier executable to format generated files' -r -F
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-ts" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -293,8 +296,14 @@ complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-json-schema" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-json-schema" -l experimental -d 'Include experimental methods and fields in the generated output'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-json-schema" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-internal-json-schema" -s o -l out -d 'Output directory where internal JSON Schema artifacts will be written' -r -F
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-internal-json-schema" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-internal-json-schema" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-internal-json-schema" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from generate-internal-json-schema" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand completion" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand completion" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
@@ -384,6 +393,7 @@ complete -c codex -n "__fish_codex_using_subcommand a" -s c -l config -d 'Overri
 complete -c codex -n "__fish_codex_using_subcommand a" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand a" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand a" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand resume" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand resume" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -409,6 +419,7 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -l search -d 'Enable
 complete -c codex -n "__fish_codex_using_subcommand resume" -l no-alt-screen -d 'Disable alternate screen mode'
 complete -c codex -n "__fish_codex_using_subcommand resume" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand resume" -s V -l version -d 'Print version'
+complete -c codex -n "__fish_codex_using_subcommand fork" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand fork" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -546,6 +557,7 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from mcp" -f -a "logout"
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
