@@ -1,6 +1,6 @@
 # Print an optspec for argparse to handle cmd's options that are independent of any subcommand.
 function __fish_codex_global_optspecs
-	string join \n c/config= enable= disable= remote= i/image= m/model= oss local-provider= p/profile= s/sandbox= a/ask-for-approval= full-auto dangerously-bypass-approvals-and-sandbox C/cd= search add-dir= no-alt-screen h/help V/version
+	string join \n c/config= enable= disable= remote= remote-auth-token-env= i/image= m/model= oss local-provider= p/profile= s/sandbox= a/ask-for-approval= full-auto dangerously-bypass-approvals-and-sandbox C/cd= search add-dir= no-alt-screen h/help V/version
 end
 
 function __fish_codex_needs_command
@@ -28,6 +28,7 @@ complete -c codex -n "__fish_codex_needs_command" -s c -l config -d 'Override a 
 complete -c codex -n "__fish_codex_needs_command" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_needs_command" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_needs_command" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_needs_command" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_needs_command" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_needs_command" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_needs_command" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -91,7 +92,6 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_su
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l ephemeral -d 'Run without persisting session files to disk'
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l progress-cursor -d 'Force cursor-based progress updates in exec mode'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l json -d 'Print events to stdout as JSONL'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s V -l version -d 'Print version'
@@ -152,7 +152,6 @@ complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subco
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l ephemeral -d 'Run without persisting session files to disk'
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l progress-cursor -d 'Force cursor-based progress updates in exec mode'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l json -d 'Print events to stdout as JSONL'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s V -l version -d 'Print version'
@@ -273,7 +272,13 @@ complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l enable -d 'En
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l listen -d 'Transport endpoint URL. Supported values: `stdio://` (default), `ws://IP:PORT`' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l session-source -d 'Session source stamped into new threads started by this app-server' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-auth -d 'Websocket auth mode for non-loopback listeners' -r -f -a "capability-token\t''
+signed-bearer-token\t''"
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-token-file -d 'Absolute path to the capability-token file' -r -F
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-shared-secret-file -d 'Absolute path to the shared secret file for signed JWT bearer tokens' -r -F
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-issuer -d 'Expected issuer for signed JWT bearer tokens' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-audience -d 'Expected audience for signed JWT bearer tokens' -r
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l ws-max-clock-skew-seconds -d 'Maximum clock skew when validating signed JWT bearer tokens' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from generate-ts generate-json-schema generate-internal-json-schema help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -394,6 +399,7 @@ complete -c codex -n "__fish_codex_using_subcommand a" -l enable -d 'Enable a fe
 complete -c codex -n "__fish_codex_using_subcommand a" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand a" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_using_subcommand resume" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand resume" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -412,6 +418,7 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -l enable -d 'Enable
 complete -c codex -n "__fish_codex_using_subcommand resume" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l last -d 'Continue the most recent session without showing the picker'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l all -d 'Show all sessions (disables cwd filtering and shows CWD column)'
+complete -c codex -n "__fish_codex_using_subcommand resume" -l include-non-interactive -d 'Include non-interactive sessions in the resume picker and --last selection'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l oss -d 'Convenience flag to select the local open source model provider. Equivalent to -c model_provider=oss; verifies a local LM Studio or Ollama server is running'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (-a on-request, --sandbox workspace-write)'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
@@ -420,6 +427,7 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -l no-alt-screen -d 
 complete -c codex -n "__fish_codex_using_subcommand resume" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand resume" -s V -l version -d 'Print version'
 complete -c codex -n "__fish_codex_using_subcommand fork" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_using_subcommand fork" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand fork" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
