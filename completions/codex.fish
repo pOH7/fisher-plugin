@@ -27,7 +27,7 @@ end
 complete -c codex -n "__fish_codex_needs_command" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_needs_command" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_needs_command" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_needs_command" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_needs_command" -l remote -d 'Connect the TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_needs_command" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_needs_command" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_needs_command" -s m -l model -d 'Model the agent should use' -r
@@ -398,7 +398,7 @@ complete -c codex -n "__fish_codex_using_subcommand a" -s c -l config -d 'Overri
 complete -c codex -n "__fish_codex_using_subcommand a" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand a" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand a" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand resume" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_using_subcommand resume" -l remote -d 'Connect the TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand resume" -s m -l model -d 'Model the agent should use' -r
@@ -426,7 +426,7 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -l search -d 'Enable
 complete -c codex -n "__fish_codex_using_subcommand resume" -l no-alt-screen -d 'Disable alternate screen mode'
 complete -c codex -n "__fish_codex_using_subcommand resume" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand resume" -s V -l version -d 'Print version'
-complete -c codex -n "__fish_codex_using_subcommand fork" -l remote -d 'Connect the app-server-backed TUI to a remote app server websocket endpoint' -r
+complete -c codex -n "__fish_codex_using_subcommand fork" -l remote -d 'Connect the TUI to a remote app server websocket endpoint' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l remote-auth-token-env -d 'Name of the environment variable containing the bearer token to send to a remote app server websocket' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand fork" -s m -l model -d 'Model the agent should use' -r
