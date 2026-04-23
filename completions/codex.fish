@@ -1,6 +1,6 @@
 # Print an optspec for argparse to handle cmd's options that are independent of any subcommand.
 function __fish_codex_global_optspecs
-	string join \n c/config= enable= disable= remote= remote-auth-token-env= i/image= m/model= oss local-provider= p/profile= s/sandbox= a/ask-for-approval= full-auto dangerously-bypass-approvals-and-sandbox C/cd= search add-dir= no-alt-screen h/help V/version
+	string join \n c/config= enable= disable= remote= remote-auth-token-env= i/image= m/model= oss local-provider= p/profile= s/sandbox= full-auto C/cd= add-dir= dangerously-bypass-approvals-and-sandbox a/ask-for-approval= search no-alt-screen h/help V/version
 end
 
 function __fish_codex_needs_command
@@ -36,14 +36,14 @@ complete -c codex -n "__fish_codex_needs_command" -s p -l profile -d 'Configurat
 complete -c codex -n "__fish_codex_needs_command" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
+complete -c codex -n "__fish_codex_needs_command" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
+complete -c codex -n "__fish_codex_needs_command" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_needs_command" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
 on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
-complete -c codex -n "__fish_codex_needs_command" -s C -l cd -d 'Tell the agent to use the specified directory as its working root. In remote mode, the path is forwarded to the server and resolved there' -r -F
-complete -c codex -n "__fish_codex_needs_command" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
-complete -c codex -n "__fish_codex_needs_command" -l oss -d 'Convenience flag to select the local open source model provider. Equivalent to -c model_provider=oss; verifies a local LM Studio or Ollama server is running'
-complete -c codex -n "__fish_codex_needs_command" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (-a on-request, --sandbox workspace-write)'
+complete -c codex -n "__fish_codex_needs_command" -l oss -d 'Use open-source provider'
+complete -c codex -n "__fish_codex_needs_command" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_needs_command" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_needs_command" -l search -d 'Enable live web search. When enabled, the native Responses `web_search` tool is available to the model (no per‑call approval)'
 complete -c codex -n "__fish_codex_needs_command" -l no-alt-screen -d 'Disable alternate screen mode'
@@ -74,14 +74,14 @@ complete -c codex -n "__fish_codex_needs_command" -a "exec-server" -d '[EXPERIME
 complete -c codex -n "__fish_codex_needs_command" -a "features" -d 'Inspect feature flags'
 complete -c codex -n "__fish_codex_needs_command" -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
+complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l color -d 'Specifies color settings for use in the output' -r -f -a "always\t''
 never\t''
@@ -91,7 +91,7 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_su
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l oss -d 'Use open-source provider'
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l ephemeral -d 'Run without persisting session files to disk'
@@ -111,7 +111,7 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l last -d 'Resume the most recent recorded session (newest) without specifying an id'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l all -d 'Show all sessions (disables cwd filtering)'
-complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l ephemeral -d 'Run without persisting session files to disk'
@@ -128,7 +128,7 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l uncommitted -d 'Review staged, unstaged, and untracked changes'
-complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l ephemeral -d 'Run without persisting session files to disk'
@@ -140,14 +140,14 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from help" -f -a "review" -d 'Run a code review against the current repository'
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
+complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l color -d 'Specifies color settings for use in the output' -r -f -a "always\t''
 never\t''
@@ -157,7 +157,7 @@ complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subco
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l oss -d 'Use open-source provider'
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l ephemeral -d 'Run without persisting session files to disk'
@@ -177,7 +177,7 @@ complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcomman
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l last -d 'Resume the most recent recorded session (newest) without specifying an id'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l all -d 'Show all sessions (disables cwd filtering)'
-complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l ephemeral -d 'Run without persisting session files to disk'
@@ -194,7 +194,7 @@ complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcomman
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l uncommitted -d 'Review staged, unstaged, and untracked changes'
-complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (--sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l skip-git-repo-check -d 'Allow running Codex outside a Git repository'
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l ephemeral -d 'Run without persisting session files to disk'
@@ -455,20 +455,20 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -s p -l profile -d '
 complete -c codex -n "__fish_codex_using_subcommand resume" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
+complete -c codex -n "__fish_codex_using_subcommand resume" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
+complete -c codex -n "__fish_codex_using_subcommand resume" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand resume" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
 on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
-complete -c codex -n "__fish_codex_using_subcommand resume" -s C -l cd -d 'Tell the agent to use the specified directory as its working root. In remote mode, the path is forwarded to the server and resolved there' -r -F
-complete -c codex -n "__fish_codex_using_subcommand resume" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand resume" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l last -d 'Continue the most recent session without showing the picker'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l all -d 'Show all sessions (disables cwd filtering and shows CWD column)'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l include-non-interactive -d 'Include non-interactive sessions in the resume picker and --last selection'
-complete -c codex -n "__fish_codex_using_subcommand resume" -l oss -d 'Convenience flag to select the local open source model provider. Equivalent to -c model_provider=oss; verifies a local LM Studio or Ollama server is running'
-complete -c codex -n "__fish_codex_using_subcommand resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (-a on-request, --sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand resume" -l oss -d 'Use open-source provider'
+complete -c codex -n "__fish_codex_using_subcommand resume" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l search -d 'Enable live web search. When enabled, the native Responses `web_search` tool is available to the model (no per‑call approval)'
 complete -c codex -n "__fish_codex_using_subcommand resume" -l no-alt-screen -d 'Disable alternate screen mode'
@@ -483,19 +483,19 @@ complete -c codex -n "__fish_codex_using_subcommand fork" -s p -l profile -d 'Co
 complete -c codex -n "__fish_codex_using_subcommand fork" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
+complete -c codex -n "__fish_codex_using_subcommand fork" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
+complete -c codex -n "__fish_codex_using_subcommand fork" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand fork" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
 on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
-complete -c codex -n "__fish_codex_using_subcommand fork" -s C -l cd -d 'Tell the agent to use the specified directory as its working root. In remote mode, the path is forwarded to the server and resolved there' -r -F
-complete -c codex -n "__fish_codex_using_subcommand fork" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand fork" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l last -d 'Fork the most recent session without showing the picker'
 complete -c codex -n "__fish_codex_using_subcommand fork" -l all -d 'Show all sessions (disables cwd filtering and shows CWD column)'
-complete -c codex -n "__fish_codex_using_subcommand fork" -l oss -d 'Convenience flag to select the local open source model provider. Equivalent to -c model_provider=oss; verifies a local LM Studio or Ollama server is running'
-complete -c codex -n "__fish_codex_using_subcommand fork" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution (-a on-request, --sandbox workspace-write)'
+complete -c codex -n "__fish_codex_using_subcommand fork" -l oss -d 'Use open-source provider'
+complete -c codex -n "__fish_codex_using_subcommand fork" -l full-auto -d 'Convenience alias for low-friction sandboxed automatic execution'
 complete -c codex -n "__fish_codex_using_subcommand fork" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
 complete -c codex -n "__fish_codex_using_subcommand fork" -l search -d 'Enable live web search. When enabled, the native Responses `web_search` tool is available to the model (no per‑call approval)'
 complete -c codex -n "__fish_codex_using_subcommand fork" -l no-alt-screen -d 'Disable alternate screen mode'
