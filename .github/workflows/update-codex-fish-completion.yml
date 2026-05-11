@@ -70,4 +70,4 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh pr merge --auto --merge --delete-branch "${{ steps.cpr.outputs.pull-request-url }}"
+          gh pr merge --merge --delete-branch "${{ steps.cpr.outputs.pull-request-url }}"
