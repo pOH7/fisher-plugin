@@ -330,7 +330,7 @@ complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subc
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "add" -d 'Add a local or Git marketplace to the configured marketplace sources'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "list" -d 'List configured marketplace names and their local snapshot roots'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "list" -d 'List plugin marketplaces Codex is currently considering and their roots'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "upgrade" -d 'Refresh configured Git marketplace snapshots'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "remove" -d 'Remove a configured marketplace source by name'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from marketplace" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
@@ -416,6 +416,7 @@ complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l json -d 'Emit machine-readable JSON'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -f -a "stop" -d 'Stop the app-server daemon'
@@ -423,10 +424,12 @@ complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fi
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -l json -d 'Emit machine-readable JSON'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -l json -d 'Emit machine-readable JSON'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "stop" -d 'Stop the app-server daemon'
@@ -684,12 +687,13 @@ complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -l enable -d '
 complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -l listen -d 'Transport endpoint URL. Supported values: `ws://IP:PORT` (default), `stdio`, `stdio://`' -r
-complete -c codex -n "__fish_codex_using_subcommand exec-server" -l remote -d 'Register this exec-server as a remote executor using the given base URL' -r
-complete -c codex -n "__fish_codex_using_subcommand exec-server" -l executor-id -d 'Executor id to attach to when registering remotely' -r
-complete -c codex -n "__fish_codex_using_subcommand exec-server" -l name -d 'Human-readable executor name' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server" -l remote -d 'Register this exec-server as a remote environment using the given base URL' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server" -l environment-id -d 'Environment id to attach to when registering remotely' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server" -l name -d 'Human-readable environment name' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server" -l strict-config -d 'Error out when config.toml contains fields that are not recognized by this version of Codex'
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -l use-agent-identity-auth -d 'Use Agent Identity auth from CODEX_ACCESS_TOKEN for remote registration'
 complete -c codex -n "__fish_codex_using_subcommand exec-server" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand features; and not __fish_seen_subcommand_from list enable disable help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
