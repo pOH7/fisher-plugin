@@ -1,6 +1,6 @@
 # Print an optspec for argparse to handle cmd's options that are independent of any subcommand.
 function __fish_codex_global_optspecs
-	string join \n c/config= enable= disable= remote= remote-auth-token-env= strict-config i/image= m/model= oss local-provider= p/profile= profile-v2= s/sandbox= dangerously-bypass-hook-trust C/cd= add-dir= dangerously-bypass-approvals-and-sandbox a/ask-for-approval= search no-alt-screen h/help V/version
+	string join \n c/config= enable= disable= remote= remote-auth-token-env= strict-config i/image= m/model= oss local-provider= p/profile= s/sandbox= dangerously-bypass-hook-trust C/cd= add-dir= dangerously-bypass-approvals-and-sandbox a/ask-for-approval= search no-alt-screen h/help V/version
 end
 
 function __fish_codex_needs_command
@@ -32,8 +32,7 @@ complete -c codex -n "__fish_codex_needs_command" -l remote-auth-token-env -d 'N
 complete -c codex -n "__fish_codex_needs_command" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_needs_command" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_needs_command" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
-complete -c codex -n "__fish_codex_needs_command" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
-complete -c codex -n "__fish_codex_needs_command" -l profile-v2 -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_needs_command" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_needs_command" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
@@ -79,8 +78,7 @@ complete -c codex -n "__fish_codex_needs_command" -a "features" -d 'Inspect feat
 complete -c codex -n "__fish_codex_needs_command" -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
-complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -l profile-v2 -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume review help" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
@@ -154,8 +152,7 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
-complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -l profile-v2 -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume review help" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
@@ -282,6 +279,8 @@ complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcomm
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l env -d 'Environment variables to set when launching the server. Only valid with stdio servers' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l url -d 'URL for a streamable HTTP MCP server' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l bearer-token-env-var -d 'Optional environment variable to read for a bearer token. Only valid with streamable HTTP servers' -r
+complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l oauth-client-id -d 'Optional OAuth client identifier to use for this MCP server' -r
+complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l oauth-resource -d 'Optional OAuth resource parameter to include during MCP login' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -451,59 +450,14 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand lo
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l ascii -d 'Use ASCII status labels and separators in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "seatbelt" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "landlock" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from macos seatbelt linux landlock windows help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l allow-unix-socket -d 'Allow the sandboxed command to bind/connect AF_UNIX sockets rooted at this path. Relative paths are resolved against the current directory. Repeat to allow multiple paths' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -l log-denials -d 'While the command runs, capture macOS sandbox denials via `log stream` and print them after exit'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from macos" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l allow-unix-socket -d 'Allow the sandboxed command to bind/connect AF_UNIX sockets rooted at this path. Relative paths are resolved against the current directory. Repeat to allow multiple paths' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -l log-denials -d 'While the command runs, capture macOS sandbox denials via `log stream` and print them after exit'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from seatbelt" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from linux" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from landlock" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from windows" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -573,8 +527,7 @@ complete -c codex -n "__fish_codex_using_subcommand resume" -l remote-auth-token
 complete -c codex -n "__fish_codex_using_subcommand resume" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand resume" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
-complete -c codex -n "__fish_codex_using_subcommand resume" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
-complete -c codex -n "__fish_codex_using_subcommand resume" -l profile-v2 -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand resume" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand resume" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
@@ -603,8 +556,7 @@ complete -c codex -n "__fish_codex_using_subcommand fork" -l remote-auth-token-e
 complete -c codex -n "__fish_codex_using_subcommand fork" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand fork" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
-complete -c codex -n "__fish_codex_using_subcommand fork" -s p -l profile -d 'Configuration profile from config.toml to specify default options' -r
-complete -c codex -n "__fish_codex_using_subcommand fork" -l profile-v2 -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand fork" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand fork" -s s -l sandbox -d 'Select the sandbox policy to use when executing model-generated shell commands' -r -f -a "read-only\t''
 workspace-write\t''
 danger-full-access\t''"
@@ -764,9 +716,6 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "stop" -d 'Stop the app-server daemon'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "macos" -d 'Run a command under Seatbelt (macOS only)'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "linux" -d 'Run a command under the Linux sandbox (bubblewrap by default)'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "windows" -d 'Run a command under Windows restricted token (Windows only)'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "models" -d 'Render the raw model catalog as JSON'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "app-server" -d 'Tooling: helps debug the app server'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "prompt-input" -d 'Render the model-visible prompt input list as JSON'
