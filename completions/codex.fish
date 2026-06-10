@@ -457,7 +457,7 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand lo
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l ascii -d 'Use ASCII status labels and separators in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s P -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
