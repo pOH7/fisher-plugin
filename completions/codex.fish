@@ -39,7 +39,6 @@ danger-full-access\t''"
 complete -c codex -n "__fish_codex_needs_command" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_needs_command" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_needs_command" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
-on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
 complete -c codex -n "__fish_codex_needs_command" -l strict-config -d 'Error out when config.toml contains fields that are not recognized by this version of Codex'
@@ -420,14 +419,15 @@ complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "generate-json-schema" -d '[experimental] Generate JSON Schema for the app server protocol'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -l json -d 'Emit machine-readable JSON'
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -f -a "stop" -d 'Stop the app-server daemon'
-complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l json -d 'Emit machine-readable JSON'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "stop" -d 'Stop the app-server daemon'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "pair" -d 'Create and print a short-lived manual pairing code'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from start" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -438,8 +438,14 @@ complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_s
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -l json -d 'Emit machine-readable JSON'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from stop" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from pair" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from pair" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from pair" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from pair" -l json -d 'Emit machine-readable JSON'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from pair" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "stop" -d 'Stop the app-server daemon'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "pair" -d 'Create and print a short-lived manual pairing code'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand completion" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand completion" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
@@ -458,12 +464,15 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand lo
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l ascii -d 'Use ASCII status labels and separators in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s P -l permissions-profile -d 'Named permissions profile to apply from the active configuration stack' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-json -d 'JSON value from `codex/sandbox-state-meta` to apply directly' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-readable-root -d 'Add a readable root to the supplied sandbox state. Repeat for multiple roots' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -s P -l permission-profile -d 'Named permissions profile to apply from the active configuration stack' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-disable-network -d 'Disable direct network access in the supplied sandbox state'
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
 complete -c codex -n "__fish_codex_using_subcommand sandbox" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -542,7 +551,6 @@ danger-full-access\t''"
 complete -c codex -n "__fish_codex_using_subcommand resume" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_using_subcommand resume" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand resume" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
-on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
 complete -c codex -n "__fish_codex_using_subcommand resume" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -629,7 +637,6 @@ danger-full-access\t''"
 complete -c codex -n "__fish_codex_using_subcommand fork" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_using_subcommand fork" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand fork" -s a -l ask-for-approval -d 'Configure when the model requires human approval before executing a command' -r -f -a "untrusted\t'Only run "trusted" commands (e.g. ls, cat, sed) without asking for user approval. Will escalate to the user if the model proposes a command that is not in the "trusted" set'
-on-failure\t'DEPRECATED: Run all commands without asking for user approval. Only asks for approval if a command fails to execute, in which case it will escalate to the user to ask for un-sandboxed execution. Prefer `on-request` for interactive runs or `never` for non-interactive runs'
 on-request\t'The model decides when to ask the user for approval'
 never\t'Never ask for user approval Execution failures are immediately returned to the model'"
 complete -c codex -n "__fish_codex_using_subcommand fork" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -785,6 +792,7 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-internal-json-schema" -d '[internal] Generate internal JSON Schema artifacts for Codex tooling'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "stop" -d 'Stop the app-server daemon'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "pair" -d 'Create and print a short-lived manual pairing code'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "models" -d 'Render the raw model catalog as JSON'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "app-server" -d 'Tooling: helps debug the app server'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "prompt-input" -d 'Render the model-visible prompt input list as JSON'
