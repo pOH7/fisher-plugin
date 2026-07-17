@@ -1,6 +1,6 @@
 # Fisher Plugin Collection
 
-Utilities for Fish shell covering remote access, Kubernetes context switching, repository navigation, release tagging, and an optional `fastfetch` startup greeting.
+Utilities for Fish shell covering remote access, Kubernetes context switching, repository navigation, version tagging, and an optional `fastfetch` startup greeting.
 
 ## Installation
 
@@ -27,7 +27,7 @@ Detailed command references live outside the main README:
 - `mofish`: Start a roaming-friendly `mosh` session and bootstrap `fish` remotely when possible.
 - `kcd`: Switch the namespace for the current Kubernetes context.
 - `kctx`: Switch Kubernetes contexts and optionally set a namespace at the same time.
-- `git-bump`: Create the next semantic version tag and push it by default.
+- `git-bump`: Synchronize supported project metadata, create the next semantic version tag, and push it by default.
 - `repo`: Jump to a repo root, resolve a unique local repo query, clone into `~/Developer`, or open a worktree.
 
 ## Requirements
