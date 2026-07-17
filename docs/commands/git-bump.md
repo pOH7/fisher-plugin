@@ -1,6 +1,6 @@
 # git-bump
 
-Create the next semantic version tag for the current Git repository. By default, `git-bump` creates a `v`-prefixed patch release and pushes the tag to the default remote.
+Synchronize the project version and create the next semantic version tag for the current Git repository. By default, `git-bump` creates a `v`-prefixed patch version and pushes it to the default remote.
 
 ## Usage
 
@@ -26,7 +26,7 @@ git-bump [TYPE] [OPTIONS]
 # Default patch bump
 git-bump
 
-# Minor or major release
+# Minor or major version
 git-bump minor
 git-bump major
 
@@ -42,6 +42,10 @@ git-bump --no-push
 ## Behavior Notes
 
 - If no matching semantic version tag exists, the command starts from `0.0.0`.
+- If the repository root has a `package.json` with a `version` field, `git-bump` updates it and creates a `chore(version)` commit before tagging. This does not publish the package.
+- When a version commit is created, the default push updates both the current branch and the new tag.
+- Repositories without a versioned `package.json` retain the tag-only behavior.
+- If `package.json` already has uncommitted changes, the command stops rather than overwriting them.
 - With uncommitted changes, `git-bump` prompts before creating the tag.
 - If `HEAD` already points at the latest matching tag, the command warns before creating another tag on the same commit unless `--force` is used.
 - When pushing is enabled, the tag is pushed to the first Git remote returned by `git remote`.
@@ -49,5 +53,6 @@ git-bump --no-push
 ## Requirements
 
 - `git`
+- Node.js when synchronizing a `package.json` version
 - An annotated-tag-capable repository
 - A configured remote when using the default push behavior

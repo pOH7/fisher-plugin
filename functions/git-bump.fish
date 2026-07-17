@@ -1,4 +1,4 @@
-function git-bump --description "Bump git tag version following semantic versioning"
+function git-bump --description "Bump project and git tag versions following semantic versioning"
     set -l options h/help d/dry-run l/list p/prefix= no-prefix no-push f/force
     argparse $options -- $argv
     or return 1
@@ -43,8 +43,35 @@ function git-bump --description "Bump git tag version following semantic version
     set -l new_version (__git_bump_increment_version $current_version $bump_type)
     set -l new_tag "$prefix$new_version"
 
+    set -l package_version ""
+    set -l package_is_versioned false
+    set -l should_bump_package false
+    set -l repo_root (__git_bump_get_repo_root)
+    set -l package_file "$repo_root/package.json"
+    if test -f "$package_file"
+        if not command -sq node
+            echo "Error: Node.js is required to inspect package.json" >&2
+            return 1
+        end
+
+        set package_version (__git_bump_get_package_version "$package_file")
+        set -l package_status $status
+        switch $package_status
+            case 0
+                set package_is_versioned true
+                if test "$package_version" != "$new_version"
+                    set should_bump_package true
+                end
+            case 2
+                # package.json has no version field; keep tag-only behavior.
+            case '*'
+                echo "Error: Failed to read package.json" >&2
+                return 1
+        end
+    end
+
     set -l same_commit_warning ""
-    if not set -q _flag_force
+    if not set -q _flag_force; and test "$should_bump_package" = false
         if __git_bump_is_same_commit_as_latest_tag $prefix
             set same_commit_warning "Warning: Current HEAD is already at the latest tag ($(__git_bump_get_latest_version_with_prefix $prefix))."
         end
@@ -53,6 +80,10 @@ function git-bump --description "Bump git tag version following semantic version
     if set -q _flag_dry_run
         echo "Current version: $prefix$current_version"
         echo "Next version: $new_tag"
+        if test "$should_bump_package" = true
+            echo "Would update package.json: $package_version -> $new_version"
+            echo "Would commit: chore(version): bump version to $new_version"
+        end
         if test -n "$same_commit_warning"
             echo "$same_commit_warning"
             echo "Creating a new tag will result in multiple tags pointing to the same commit."
@@ -63,6 +94,11 @@ function git-bump --description "Bump git tag version following semantic version
             echo "Would push to remote: $(__git_bump_get_default_remote)"
         end
         return 0
+    end
+
+    if test "$package_is_versioned" = true; and not __git_bump_package_is_clean
+        echo "Error: package.json already has uncommitted changes; refusing to overwrite them." >&2
+        return 1
     end
 
     if __git_bump_has_uncommitted_changes
@@ -84,12 +120,24 @@ function git-bump --description "Bump git tag version following semantic version
         end
     end
 
-    if git tag -a "$new_tag" -m "Release $new_tag"
+    set -l created_version_commit false
+    if test "$should_bump_package" = true
+        if not __git_bump_update_package_version "$new_version"
+            return 1
+        end
+        set created_version_commit true
+    end
+
+    if git tag -a "$new_tag" -m "Version $new_tag"
         echo "Created tag: $new_tag"
         
         if not set -q _flag_no_push
-            if __git_bump_push_tag "$new_tag"
-                echo "Pushed tag to remote: $new_tag"
+            if __git_bump_push "$new_tag" "$created_version_commit"
+                if test "$created_version_commit" = true
+                    echo "Pushed version commit and tag to remote: $new_tag"
+                else
+                    echo "Pushed tag to remote: $new_tag"
+                end
             else
                 echo "Warning: Tag created locally but failed to push to remote" >&2
                 return 1
@@ -104,7 +152,7 @@ function git-bump --description "Bump git tag version following semantic version
 end
 
 function __git_bump_help
-    echo "git-bump - Bump git tag version following semantic versioning"
+    echo "git-bump - Bump project and git tag versions following semantic versioning"
     echo ""
     echo "Usage:"
     echo "  git-bump [TYPE] [OPTIONS]"
@@ -122,6 +170,10 @@ function __git_bump_help
     echo "  --no-prefix       Don't use any prefix"
     echo "  --no-push         Don't push tag to remote (default: push)"
     echo "  -f, --force       Skip same-commit check when HEAD is at latest tag"
+    echo ""
+    echo "If package.json has a version field, git-bump updates it and creates"
+    echo "a chore(version) commit before creating the tag. This is a version"
+    echo "synchronization step; it does not publish a package."
     echo ""
     echo "Examples:"
     echo "  git-bump                    # Bump patch with 'v' prefix and push"
@@ -218,6 +270,43 @@ function __git_bump_increment_version
     echo "$major.$minor.$patch"
 end
 
+function __git_bump_get_repo_root
+    git rev-parse --show-toplevel 2>/dev/null
+end
+
+function __git_bump_get_package_version
+    set -l package_file $argv[1]
+    node -e 'const fs = require("node:fs"); let p; try { p = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch { process.exit(1); } if (typeof p.version !== "string") process.exit(2); process.stdout.write(p.version);' "$package_file" 2>/dev/null
+end
+
+function __git_bump_package_is_clean
+    set -l repo_root (__git_bump_get_repo_root)
+    test -z "$(git -C "$repo_root" status --porcelain -- package.json)"
+end
+
+function __git_bump_update_package_version
+    set -l new_version $argv[1]
+    set -l repo_root (__git_bump_get_repo_root)
+    set -l package_file "$repo_root/package.json"
+
+    if not node -e 'const fs = require("node:fs"); const path = process.argv[1]; const version = process.argv[2]; const p = JSON.parse(fs.readFileSync(path, "utf8")); p.version = version; fs.writeFileSync(path, JSON.stringify(p, null, 2) + "\n");' "$package_file" "$new_version"
+        echo "Error: Failed to update package.json" >&2
+        return 1
+    end
+
+    if not git -C "$repo_root" add -- package.json
+        echo "Error: Failed to stage package.json" >&2
+        return 1
+    end
+
+    if not git -C "$repo_root" commit -m "chore(version): bump version to $new_version" -- package.json
+        echo "Error: Failed to commit package.json version update" >&2
+        return 1
+    end
+
+    echo "Updated package.json and created version commit: $new_version"
+end
+
 function __git_bump_has_remote
     git remote >/dev/null 2>&1
 end
@@ -260,8 +349,9 @@ function __git_bump_is_same_commit_as_latest_tag
     test "$current_commit" = "$tag_commit"
 end
 
-function __git_bump_push_tag
+function __git_bump_push
     set -l tag $argv[1]
+    set -l include_head $argv[2]
     
     if not __git_bump_has_remote
         echo "Error: No remote repository configured" >&2
@@ -269,5 +359,9 @@ function __git_bump_push_tag
     end
     
     set -l remote (__git_bump_get_default_remote)
-    git push "$remote" "$tag" 2>/dev/null
+    if test "$include_head" = true
+        git push "$remote" HEAD "$tag" 2>/dev/null
+    else
+        git push "$remote" "$tag" 2>/dev/null
+    end
 end
