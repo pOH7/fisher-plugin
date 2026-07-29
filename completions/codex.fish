@@ -354,6 +354,7 @@ complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l enable -d 'En
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l strict-config -d 'Error out when config.toml contains fields that are not recognized by this version of Codex'
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l code-mode-host -d 'Connect to a remote code-mode host instead of starting a local host' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l listen -d 'Transport endpoint URL. Supported values: `stdio://` (default), `unix://`, `unix://PATH`, `ws://IP:PORT`, `off`' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l ws-auth -d 'Websocket auth mode for non-loopback listeners' -r -f -a "capability-token\t''
 signed-bearer-token\t''"
