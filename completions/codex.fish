@@ -517,6 +517,7 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -s c -l config -d 'O
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l json -d 'Emit a redacted machine-readable report'
+complete -c codex -n "__fish_codex_using_subcommand doctor" -l feedback -d 'Limit database integrity scans when collecting a feedback attachment'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l summary -d 'Only show grouped check rows and the final count summary'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand long lists in detailed human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
