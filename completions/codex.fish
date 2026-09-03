@@ -368,18 +368,18 @@ complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_
 complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "add" -d 'Install a plugin from a configured marketplace snapshot'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "list" -d 'List plugins available from configured marketplace snapshots'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "add" -d 'Install a plugin from a configured or remote marketplace'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "list" -d 'List plugins available from configured and remote marketplaces'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "marketplace" -d 'Add, list, upgrade, or remove configured plugin marketplaces'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "remove" -d 'Remove an installed plugin from local config and cache'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "remove" -d 'Uninstall a plugin and remove its local cache'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and not __fish_seen_subcommand_from add list marketplace remove help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -s m -l marketplace -d 'Configured marketplace name to use when PLUGIN does not include @MARKETPLACE' -r
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -s m -l marketplace -d 'Marketplace name to use when PLUGIN does not include @MARKETPLACE' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -l json -d 'Output install result as JSON'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from add" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from list" -s m -l marketplace -d 'Only list plugins from this configured marketplace name' -r
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from list" -s m -l marketplace -d 'Only list plugins from this marketplace name' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from list" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from list" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from list" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -401,10 +401,10 @@ complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subc
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from remove" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from remove" -l json -d 'Output remove result as JSON'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from remove" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "add" -d 'Install a plugin from a configured marketplace snapshot'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "list" -d 'List plugins available from configured marketplace snapshots'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "add" -d 'Install a plugin from a configured or remote marketplace'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "list" -d 'List plugins available from configured and remote marketplaces'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "marketplace" -d 'Add, list, upgrade, or remove configured plugin marketplaces'
-complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "remove" -d 'Remove an installed plugin from local config and cache'
+complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "remove" -d 'Uninstall a plugin and remove its local cache'
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp-server" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
@@ -895,10 +895,10 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from mcp" -f -a "remove"
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from mcp" -f -a "login"
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from mcp" -f -a "logout"
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "add" -d 'Install a plugin from a configured marketplace snapshot'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "list" -d 'List plugins available from configured marketplace snapshots'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "add" -d 'Install a plugin from a configured or remote marketplace'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "list" -d 'List plugins available from configured and remote marketplaces'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "marketplace" -d 'Add, list, upgrade, or remove configured plugin marketplaces'
-complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "remove" -d 'Remove an installed plugin from local config and cache'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from plugin" -f -a "remove" -d 'Uninstall a plugin and remove its local cache'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "daemon" -d 'Manage the local app-server daemon'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "proxy" -d 'Proxy stdio bytes to the running app-server control socket'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from app-server" -f -a "generate-ts" -d '[experimental] Generate TypeScript bindings for the app server protocol'
