@@ -355,6 +355,7 @@ complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcomm
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l url -d 'URL for a streamable HTTP MCP server' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l bearer-token-env-var -d 'Optional environment variable to read for a bearer token. Only valid with streamable HTTP servers' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l oauth-client-id -d 'Optional OAuth client identifier to use for this MCP server' -r
+complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l oauth-client-secret -d 'Optional OAuth client secret for the pre-registered client' -r
 complete -c codex -n "__fish_codex_using_subcommand mcp; and __fish_seen_subcommand_from add" -l oauth-client-registration -d 'OAuth client-registration strategy for the immediate login only' -r -f -a "auto\t''
 cimd\t''
 dcr\t''"
@@ -431,7 +432,7 @@ complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subc
 complete -c codex -n "__fish_codex_using_subcommand plugin; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l code-mode-host -d 'Connect to a remote code-mode host instead of starting a local host' -r
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l listen -d 'Transport endpoint URL. Supported values: `stdio://` (default), `unix://`, `unix://PATH`, `ws://IP:PORT`, `off`' -r
-complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l ws-auth -d 'Websocket auth mode for non-loopback listeners' -r -f -a "capability-token\t''
+complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l ws-auth -d 'Authentication mode for incoming WebSocket connections' -r -f -a "capability-token\t''
 signed-bearer-token\t''"
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l ws-token-file -d 'Absolute path to the capability-token file' -r -F
 complete -c codex -n "__fish_codex_using_subcommand app-server; and not __fish_seen_subcommand_from daemon proxy generate-ts generate-json-schema generate-internal-json-schema help" -l ws-token-sha256 -d 'Hex-encoded SHA-256 digest of the capability token' -r
@@ -833,8 +834,17 @@ complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -s c -l config
 complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand stdio-to-uds" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l linux-sandbox-pid-namespace -d 'Linux PID namespace: isolate (default) or inherit. Inherit allows signals to other same-UID processes; enable only when provisioning a dedicated environment' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l concurrent-requests -d 'Maximum number of requests to process concurrently on each connection' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l listen -d 'Transport endpoint URL. Supported values: `ws://IP:PORT` (default), `stdio`, `stdio://`' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-auth -d 'Authentication mode for incoming WebSocket connections' -r -f -a "capability-token\t''
+signed-bearer-token\t''"
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-token-file -d 'Absolute path to the capability-token file' -r -F
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-token-sha256 -d 'Hex-encoded SHA-256 digest of the capability token' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-shared-secret-file -d 'Absolute path to the shared secret file for signed JWT bearer tokens' -r -F
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-issuer -d 'Expected issuer for signed JWT bearer tokens' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-audience -d 'Expected audience for signed JWT bearer tokens' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l ws-max-clock-skew-seconds -d 'Maximum clock skew when validating signed JWT bearer tokens' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l remote -d 'Register this exec-server as a remote environment using the given base URL' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -l remote-transport -d 'Transport used for the remote executor connection' -r -f -a "noise\t''
 direct\t''"
@@ -854,6 +864,7 @@ complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -f -a "forward" -d 'Register an existing WebSocket exec-server as a remote environment'
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and not __fish_seen_subcommand_from forward help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and __fish_seen_subcommand_from forward" -l connect -d 'Destination exec-server WebSocket URL' -r
+complete -c codex -n "__fish_codex_using_subcommand exec-server; and __fish_seen_subcommand_from forward" -l linux-sandbox-pid-namespace -d 'Linux PID namespace: isolate (default) or inherit. Inherit allows signals to other same-UID processes; enable only when provisioning a dedicated environment' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and __fish_seen_subcommand_from forward" -l remote -d 'Register this exec-server as a remote environment using the given base URL' -r
 complete -c codex -n "__fish_codex_using_subcommand exec-server; and __fish_seen_subcommand_from forward" -l remote-transport -d 'Transport used for the remote executor connection' -r -f -a "noise\t''
 direct\t''"
