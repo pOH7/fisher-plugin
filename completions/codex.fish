@@ -113,6 +113,9 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_su
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l color -d 'Specifies color settings for use in the output' -r -f -a "always\t''
 never\t''
@@ -141,6 +144,9 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_su
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -s i -l image -d 'Optional image(s) to attach to the prompt sent after resuming' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from resume" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -161,6 +167,9 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -s i -l image -d 'Optional image(s) to attach to the prompt sent after forking' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from fork" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -181,6 +190,9 @@ complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l title -d 'Optional commit title to display in the review summary' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and __fish_seen_subcommand_from review" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -211,6 +223,9 @@ complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subco
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subcommand_from resume fork review help" -l color -d 'Specifies color settings for use in the output' -r -f -a "always\t''
 never\t''
@@ -239,6 +254,9 @@ complete -c codex -n "__fish_codex_using_subcommand e; and not __fish_seen_subco
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -s i -l image -d 'Optional image(s) to attach to the prompt sent after resuming' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from resume" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -259,6 +277,9 @@ complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcomman
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -s i -l image -d 'Optional image(s) to attach to the prompt sent after forking' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from fork" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
@@ -279,6 +300,9 @@ complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcomman
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l title -d 'Optional commit title to display in the review summary' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -s m -l model -d 'Model the agent should use' -r
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l thread-source -d 'Source classification for newly created or forked threads' -r
+complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l cyber-access-program -d 'Request an experimental Cyber access program for this turn (OpenAI provider only). Omit to use server defaults. Not supported with review; fork requires a prompt' -r -f -a "standard\t''
+daybreak_blue\t''
+daybreak_red\t''"
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -l output-schema -d 'Path to a JSON Schema file describing the model\'s final response shape' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -s o -l output-last-message -d 'Specifies file where the last message from the agent should be written' -r -F
 complete -c codex -n "__fish_codex_using_subcommand e; and __fish_seen_subcommand_from review" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
