@@ -102,6 +102,7 @@ complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l disable -d 'D
 complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l auth-token-stdin -d 'Read the initial bearer from stdin'
 complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l auth-token-updates-stdin -d 'Read replacement bearers from stdin and stop when the controlling pipe closes'
 complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l connect-headers-stdin -d 'Read a JSON list of extension-header name/value pairs before the first bearer'
+complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l diagnostics-json -d 'Emit credential-safe JSON diagnostics on stderr instead of human-readable errors'
 complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -s i -l image -d 'Optional image(s) to attach to the initial prompt' -r -F
 complete -c codex -n "__fish_codex_using_subcommand exec; and not __fish_seen_subcommand_from resume fork review help" -l local-provider -d 'Specify which local provider to use (lmstudio or ollama). If not specified with --oss, will use config default or show selection' -r
@@ -526,6 +527,7 @@ complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fi
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l json -d 'Emit machine-readable JSON'
+complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -l no-daemon -d 'Run an embedded app-server in the foreground until Ctrl-C'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand remote-control; and not __fish_seen_subcommand_from start stop pair help" -f -a "stop" -d 'Stop the app-server daemon'
@@ -569,17 +571,25 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand lo
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l ascii -d 'Use ASCII status labels and separators in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-json -d 'JSON value from `codex/sandbox-state-meta` to apply directly' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-readable-root -d 'Add a readable root to the supplied sandbox state. Repeat for multiple roots' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s P -l permission-profile -d 'Named permissions profile to apply from the active configuration stack' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l sandbox-state-disable-network -d 'Disable direct network access in the supplied sandbox state'
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
-complete -c codex -n "__fish_codex_using_subcommand sandbox" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-json -d 'JSON value from `codex/sandbox-state-meta` to apply directly' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-readable-root -d 'Add a readable root to the supplied sandbox state. Repeat for multiple roots' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s P -l permission-profile -d 'Named permissions profile to apply from the active configuration stack' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s C -l cd -d 'Working directory used for profile resolution and command execution' -r -F
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-disable-network -d 'Disable direct network access in the supplied sandbox state'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l include-managed-config -d 'Include managed requirements while resolving an explicit permissions profile'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -a "uninstall" -d 'Remove the legacy Windows sandbox\'s machine-wide accounts and network rules'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from uninstall" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from uninstall" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from uninstall" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from uninstall" -s h -l help -d 'Print help (see more with \'--help\')'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "uninstall" -d 'Remove the legacy Windows sandbox\'s machine-wide accounts and network rules'
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand debug; and not __fish_seen_subcommand_from models app-server prompt-input trace-reduce clear-memories help" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
@@ -985,6 +995,7 @@ complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcom
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "start" -d 'Start the app-server daemon with remote control enabled'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "stop" -d 'Stop the app-server daemon'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from remote-control" -f -a "pair" -d 'Create and print a short-lived manual pairing code'
+complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from sandbox" -f -a "uninstall" -d 'Remove the legacy Windows sandbox\'s machine-wide accounts and network rules'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "models" -d 'Render the raw model catalog as JSON'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "app-server" -d 'Tooling: helps debug the app server'
 complete -c codex -n "__fish_codex_using_subcommand help; and __fish_seen_subcommand_from debug" -f -a "prompt-input" -d 'Render the model-visible prompt input list as JSON'
