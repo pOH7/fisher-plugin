@@ -571,7 +571,7 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand lo
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l no-color -d 'Disable ANSI color in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l ascii -d 'Use ASCII status labels and separators in human output'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-json -d 'JSON value from `codex/sandbox-state-meta` to apply directly' -r
+complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-json -d 'Opaque JSON value from `codex/sandbox-state` to apply directly' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -l sandbox-state-readable-root -d 'Add a readable root to the supplied sandbox state. Repeat for multiple roots' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s P -l permission-profile -d 'Named permissions profile to apply from the active configuration stack' -r
 complete -c codex -n "__fish_codex_using_subcommand sandbox; and not __fish_seen_subcommand_from uninstall help" -s p -l profile -d 'Layer $CODEX_HOME/<name>.config.toml on top of the base user config' -r
