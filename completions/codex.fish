@@ -570,6 +570,7 @@ complete -c codex -n "__fish_codex_using_subcommand doctor" -s c -l config -d 'O
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l json -d 'Emit a redacted machine-readable report'
+complete -c codex -n "__fish_codex_using_subcommand doctor" -l network-only -d 'Run config, network environment, provider HTTP, and Responses WebSocket checks'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l feedback -d 'Limit database integrity scans when collecting a feedback attachment'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l summary -d 'Only show grouped check rows and the final count summary'
 complete -c codex -n "__fish_codex_using_subcommand doctor" -l all -d 'Expand long lists in detailed human output'
@@ -702,9 +703,10 @@ workspace-write\t''
 danger-full-access\t''"
 complete -c codex -n "__fish_codex_using_subcommand queue" -s C -l cd -d 'Tell the agent to use the specified directory as its working root' -r -F
 complete -c codex -n "__fish_codex_using_subcommand queue" -l add-dir -d 'Additional directories that should be writable alongside the primary workspace' -r -f -a "(__fish_complete_directories)"
-complete -c codex -n "__fish_codex_using_subcommand queue" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
+complete -c codex -n "__fish_codex_using_subcommand queue" -s c -l config -d 'Override a startup configuration value (key=value). Queued messages use the thread\'s model.' -r
 complete -c codex -n "__fish_codex_using_subcommand queue" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand queue" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
+complete -c codex -n "__fish_codex_using_subcommand queue" -l resume -d 'After queueing, try to resume the thread on the local daemon or selected --remote server. A failed resume produces a warning and the command still succeeds'
 complete -c codex -n "__fish_codex_using_subcommand queue" -l oss -d 'Use open-source provider'
 complete -c codex -n "__fish_codex_using_subcommand queue" -l approve-for-me -d 'Route approval requests through automatic review using the workspace-write sandbox'
 complete -c codex -n "__fish_codex_using_subcommand queue" -l dangerously-bypass-approvals-and-sandbox -d 'Skip all confirmation prompts and execute commands without sandboxing. EXTREMELY DANGEROUS. Intended solely for running in environments that are externally sandboxed'
