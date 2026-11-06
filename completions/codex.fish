@@ -51,7 +51,7 @@ complete -c codex -n "__fish_codex_needs_command" -l no-alt-screen -d 'Disable a
 complete -c codex -n "__fish_codex_needs_command" -l no-daemon -d 'Run without the shared background server, even if it is already running'
 complete -c codex -n "__fish_codex_needs_command" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_needs_command" -s V -l version -d 'Print version'
-complete -c codex -n "__fish_codex_needs_command" -a "agents" -d 'Browse all agent sessions on the shared local app-server daemon'
+complete -c codex -n "__fish_codex_needs_command" -a "agents" -d 'Open the agent command center to browse and switch sessions'
 complete -c codex -n "__fish_codex_needs_command" -a "tcp-tunnel" -d 'Internal: forward a local TCP socket through an HTTP/3 CONNECT proxy'
 complete -c codex -n "__fish_codex_needs_command" -a "exec" -d 'Run Codex non-interactively'
 complete -c codex -n "__fish_codex_needs_command" -a "e" -d 'Run Codex non-interactively'
@@ -90,7 +90,7 @@ complete -c codex -n "__fish_codex_using_subcommand agents" -s C -l cd -d 'Use t
 complete -c codex -n "__fish_codex_using_subcommand agents" -s c -l config -d 'Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed as TOML. If it fails to parse as TOML, the raw string is used as a literal' -r
 complete -c codex -n "__fish_codex_using_subcommand agents" -l enable -d 'Enable a feature (repeatable). Equivalent to `-c features.<name>=true`' -r
 complete -c codex -n "__fish_codex_using_subcommand agents" -l disable -d 'Disable a feature (repeatable). Equivalent to `-c features.<name>=false`' -r
-complete -c codex -n "__fish_codex_using_subcommand agents" -l no-daemon -d 'The agents overview requires a shared server; this option is rejected'
+complete -c codex -n "__fish_codex_using_subcommand agents" -l no-daemon -d 'Run the agents overview with an embedded app server'
 complete -c codex -n "__fish_codex_using_subcommand agents" -l no-alt-screen -d 'Disable alternate screen mode'
 complete -c codex -n "__fish_codex_using_subcommand agents" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c codex -n "__fish_codex_using_subcommand tcp-tunnel" -l proxy-url -d 'HTTPS origin of the HTTP/3 proxy' -r
@@ -962,7 +962,7 @@ complete -c codex -n "__fish_codex_using_subcommand features; and __fish_seen_su
 complete -c codex -n "__fish_codex_using_subcommand features; and __fish_seen_subcommand_from help" -f -a "enable" -d 'Enable a feature in config.toml'
 complete -c codex -n "__fish_codex_using_subcommand features; and __fish_seen_subcommand_from help" -f -a "disable" -d 'Disable a feature in config.toml'
 complete -c codex -n "__fish_codex_using_subcommand features; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
-complete -c codex -n "__fish_codex_using_subcommand help; and not __fish_seen_subcommand_from agents tcp-tunnel exec review login logout mcp plugin app-server remote-control completion update doctor sandbox debug execpolicy apply resume queue archive delete migrate-rollouts migrate-nfs-db unarchive fork cloud responses-api-proxy stdio-to-uds exec-server features help" -f -a "agents" -d 'Browse all agent sessions on the shared local app-server daemon'
+complete -c codex -n "__fish_codex_using_subcommand help; and not __fish_seen_subcommand_from agents tcp-tunnel exec review login logout mcp plugin app-server remote-control completion update doctor sandbox debug execpolicy apply resume queue archive delete migrate-rollouts migrate-nfs-db unarchive fork cloud responses-api-proxy stdio-to-uds exec-server features help" -f -a "agents" -d 'Open the agent command center to browse and switch sessions'
 complete -c codex -n "__fish_codex_using_subcommand help; and not __fish_seen_subcommand_from agents tcp-tunnel exec review login logout mcp plugin app-server remote-control completion update doctor sandbox debug execpolicy apply resume queue archive delete migrate-rollouts migrate-nfs-db unarchive fork cloud responses-api-proxy stdio-to-uds exec-server features help" -f -a "tcp-tunnel" -d 'Internal: forward a local TCP socket through an HTTP/3 CONNECT proxy'
 complete -c codex -n "__fish_codex_using_subcommand help; and not __fish_seen_subcommand_from agents tcp-tunnel exec review login logout mcp plugin app-server remote-control completion update doctor sandbox debug execpolicy apply resume queue archive delete migrate-rollouts migrate-nfs-db unarchive fork cloud responses-api-proxy stdio-to-uds exec-server features help" -f -a "exec" -d 'Run Codex non-interactively'
 complete -c codex -n "__fish_codex_using_subcommand help; and not __fish_seen_subcommand_from agents tcp-tunnel exec review login logout mcp plugin app-server remote-control completion update doctor sandbox debug execpolicy apply resume queue archive delete migrate-rollouts migrate-nfs-db unarchive fork cloud responses-api-proxy stdio-to-uds exec-server features help" -f -a "review" -d 'Run a code review non-interactively'
